@@ -1,3 +1,4 @@
+import Providers from '@/utils/provider'
 import './globals.css'
 import { Nunito_Sans } from 'next/font/google'
 
@@ -16,7 +17,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang='en'>
-      <body className={nunito.className}>{children}</body>
+      <body className={nunito.className}>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   )
 }

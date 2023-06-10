@@ -5,7 +5,7 @@ import { ChevronDown, RefreshCw } from 'lucide-react'
 import ReportingMenu from '@/components/ReportingMenu'
 const HomePage = () => {
   return (
-    <div className=''>
+    <div className=' bg-[#FAFFFF]'>
       <header className=' border-b-2 border-[#EBEBEB]'>
         <nav className=' pl-6 pr-16 flex py-5 items-center gap-16'>
           <Image src={Logo} alt='Logo' />

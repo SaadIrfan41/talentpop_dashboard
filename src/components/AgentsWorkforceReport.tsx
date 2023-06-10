@@ -11,15 +11,39 @@ import { PieChartData } from './data'
 
 import dynamic from 'next/dynamic'
 
-import homeStyles from '../styles/Home.module.css'
 import { BarComponent } from './BarChart'
 import { BarComponent2 } from './Barchart2'
+import getQueryClient from '@/utils/getQueryClient'
+import { dehydrate } from '@tanstack/query-core'
+import { useQuery } from '@tanstack/react-query'
+import TotalActiveAgents, {
+  getTotalActiveAgents,
+} from './apis/getTotalActiveAgents'
+import Hydrate from '@/utils/hydrate.client'
+import TotalInternalTeamMembers from './apis/getTotalInternalTeamsMember'
 
 const MyResponsivePie = dynamic(() => import('./PieChart'), {
   ssr: false,
 })
 
-const AgentsWorkforceReport = () => {
+// const getTotalActiveAgents = async () => {
+//   const res = await fetch(
+//     'https://reporting.hotel3lue3ijq.us-east-1.cs.amazonlightsail.com/active-agents'
+//   )
+//   const agents_count = await res.json()
+//   return agents_count
+// }
+const AgentsWorkforceReport = async () => {
+  // const { data, isLoading } = useQuery({
+  //   queryKey: ['total-active-agents'],
+  //   queryFn: () => getTotalActiveAgents(),
+  // })
+  // if (isLoading) return <h1>Loading</h1>
+  // console.log(data)
+  // const queryClient = getQueryClient()
+  // await queryClient.prefetchQuery(['total-active-agents'], getTotalActiveAgents)
+  // const dehydratedState = dehydrate(queryClient)
+  // console.log(dehydratedState)
   return (
     <section className=' pt-11 border px-7'>
       <div className=' flex  gap-7  text-[#163143] justify-around'>
@@ -31,7 +55,9 @@ const AgentsWorkforceReport = () => {
           <div className=' flex flex-col py-5 '>
             <span className=' font-medium text-lg'>Active agents</span>
             <span className='text-[40px] font-extrabold flex items-center justify-center gap-3'>
-              974 <StatsPositiveIcon />
+              {/* <Hydrate state={dehydratedState}> */}
+              <TotalActiveAgents />
+              {/* </Hydrate> */}
             </span>
           </div>
         </div>
@@ -43,8 +69,7 @@ const AgentsWorkforceReport = () => {
           <div className=' flex flex-col py-5 '>
             <span className=' font-medium text-lg'>Internal Members</span>
             <span className='text-[40px] font-extrabold flex items-center justify-center gap-3'>
-              574
-              <StatsNegativeIcon />
+              <TotalInternalTeamMembers />
             </span>
           </div>
         </div>
