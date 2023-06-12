@@ -9,7 +9,7 @@ import {
   Legend,
   BarElement,
   Title,
-} from 'chart.js'
+} from 'chart.js/auto'
 import { Chart } from 'react-chartjs-2'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
