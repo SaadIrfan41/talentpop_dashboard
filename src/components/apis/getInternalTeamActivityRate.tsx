@@ -6,7 +6,8 @@ import { InternalTeamActivityRateChart } from '../InternalTeamActivityRateChart'
 
 const getInternalTeamActivityRate = async ({ pageParams }: any) => {
   const res = await fetch(
-    'https://reporting.hotel3lue3ijq.us-east-1.cs.amazonlightsail.com/internal-team-activity-rate'
+    // 'https://reporting.hotel3lue3ijq.us-east-1.cs.amazonlightsail.com/internal-team-activity-rate'
+    'https://reporting.hotel3lue3ijq.us-east-1.cs.amazonlightsail.com/internal-team-activity-rate?client=talentpop'
     // {
     //   params: { _page: pageParams },
     // }
@@ -44,13 +45,13 @@ const InternalTeamActivityRate = () => {
           ))}
         </Fragment>
       ))}
-      {isFetchingNextPage ? (
+      {/* {isFetchingNextPage ? (
         <div className=' text-red-500'>Loading more...</div>
       ) : hasNextPage ? (
         <button className=' text-red-500 ' onClick={() => fetchNextPage()}>
           Load More
         </button>
-      ) : null}
+      ) : null} */}
     </div>
   )
 }
