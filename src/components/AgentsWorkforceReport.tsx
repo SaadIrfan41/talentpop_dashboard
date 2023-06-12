@@ -11,8 +11,6 @@ import { PieChartData } from './data'
 
 import dynamic from 'next/dynamic'
 
-import { BarComponent } from './BarChart'
-import { BarComponent2 } from './Barchart2'
 import getQueryClient from '@/utils/getQueryClient'
 import { dehydrate } from '@tanstack/query-core'
 import { useQuery } from '@tanstack/react-query'
@@ -20,7 +18,23 @@ import TotalActiveAgents, {
   getTotalActiveAgents,
 } from './apis/getTotalActiveAgents'
 import Hydrate from '@/utils/hydrate.client'
-import TotalInternalTeamMembers from './apis/getTotalInternalTeamsMember'
+import TotalInternalTeamMembers, {
+  getTotalInternalTeamMembers,
+} from './apis/getTotalInternalTeamsMember'
+import ClientsWithAgents from './apis/getClientsWithAgents'
+import TotalInternalMembers from './apis/getTotalInternalMembers'
+import HoursBilledLastMonth from './apis/getHoursBilledLastMonth'
+import AgentsHighActivityReport from './apis/getAgentsHighActivityReport'
+import { ChevronDownIcon } from 'lucide-react'
+import { HighActivityChart } from './HorizontalBarChart'
+import AgentsLowActivityReport from './apis/getAgentsLowActivityReport'
+import { InternalTeamActivityChart } from './InternalTeamActivityChart'
+import InternalTeamReportAVG from './apis/getInternalTeamReport'
+import InternalTeamActivityRate from './apis/getInternalTeamActivityRate'
+import AbandonedLateOntimeShifts from './apis/getAbandonedLateOntimeShifts'
+import TotalBilledHours from './apis/getTotalBilledHours'
+import AverageAgentActivity from './apis/getAverageAgentActivity'
+import AverageInternalTeamActivity from './apis/getAverageInternalTeamActivity'
 
 const MyResponsivePie = dynamic(() => import('./PieChart'), {
   ssr: false,
@@ -41,11 +55,19 @@ const AgentsWorkforceReport = async () => {
   // if (isLoading) return <h1>Loading</h1>
   // console.log(data)
   // const queryClient = getQueryClient()
-  // await queryClient.prefetchQuery(['total-active-agents'], getTotalActiveAgents)
+  // await queryClient.prefetchQuery(
+  //   ['total-active-agents'],
+  //   getTotalActiveAgents,
+  // )
+  // await queryClient.prefetchQuery(
+  //   ['total-internal-team-members'],
+
+  //   getTotalInternalTeamMembers,
+  // )
   // const dehydratedState = dehydrate(queryClient)
   // console.log(dehydratedState)
   return (
-    <section className=' pt-11 border px-7'>
+    <section className=' pt-11 border px-7 pb-20  rounded-tr-2xl rounded-b-2xl'>
       <div className=' flex  gap-7  text-[#163143] justify-around'>
         <div className=' pt-4 border flex flex-col text-center w-[241px] rounded-2xl'>
           <span className=' mb-4 capitalize text-base font-extrabold '>
@@ -81,8 +103,7 @@ const AgentsWorkforceReport = async () => {
           <div className=' flex flex-col py-5 '>
             <span className=' font-medium text-lg'>Total Bill</span>
             <span className='text-[40px] font-extrabold flex items-center justify-center gap-3'>
-              21M
-              <StatsNegativeIcon />
+              <TotalBilledHours />
             </span>
           </div>
         </div>
@@ -94,7 +115,7 @@ const AgentsWorkforceReport = async () => {
           <div className=' flex flex-col py-5 '>
             <span className=' font-medium text-lg'>Avg. Rate</span>
             <span className='text-[40px] font-extrabold flex items-center justify-center gap-3'>
-              67.2 <StatsPositiveIcon />
+              <AverageAgentActivity />
             </span>
           </div>
         </div>
@@ -106,15 +127,15 @@ const AgentsWorkforceReport = async () => {
           <div className=' flex flex-col py-5 '>
             <span className=' font-medium text-lg'>Avg. Rate</span>
             <span className='text-[40px] font-extrabold flex items-center justify-center gap-3'>
-              73.6 <StatsPositiveIcon />
+              <AverageInternalTeamActivity />
             </span>
           </div>
         </div>
       </div>
       <div className=' mt-7 text-[#163143]  flex gap-5  '>
         {/* CLIENT NAME # OF AGENTS */}
-        <div className='border rounded-2xl w-[350px]  px-3 overflow-y-auto'>
-          <div className='flex items-center py-4 '>
+        <div className='border rounded-2xl w-[350px]   overflow-y-auto'>
+          <div className='flex items-center py-4 px-3'>
             <span className=' text-base font-extrabold '>
               Client Name and # of Agents
             </span>
@@ -124,156 +145,13 @@ const AgentsWorkforceReport = async () => {
             </div>
           </div>
           <div className=' h-[2px] w-full bg-[#EFEFEF]' />
-          <div className='max-h-[439px] overflow-y-auto pt-4 px-4'>
-            <div className=' '>
-              <span className=' font-medium text-base'>
-                Customer Service - Cozy Earth
-              </span>
-              <div className='flex items-center gap-1'>
-                <span className=' font-bold text-lg'>44</span>
-                <UpIcon />
-                <div
-                  style={{
-                    background:
-                      'linear-gradient(90.26deg, #163143 -24.85%, #69C920 80.53%)',
-                  }}
-                  className=' w-[115px] h-3'
-                />
-              </div>
-            </div>
-            <div className=' '>
-              <span className=' font-medium text-base'>
-                Customer Service - Cozy Earth
-              </span>
-              <div className='flex items-center gap-1'>
-                <span className=' font-bold text-lg'>44</span>
-                <UpIcon />
-                <div
-                  style={{
-                    background:
-                      'linear-gradient(90.26deg, #163143 -24.85%, #69C920 80.53%)',
-                  }}
-                  className=' w-[115px] h-3'
-                />
-              </div>
-            </div>
-            <div className=' '>
-              <span className=' font-medium text-base'>
-                Customer Service - Cozy Earth
-              </span>
-              <div className='flex items-center gap-1'>
-                <span className=' font-bold text-lg'>44</span>
-                <UpIcon />
-                <div
-                  style={{
-                    background:
-                      'linear-gradient(90.26deg, #163143 -24.85%, #69C920 80.53%)',
-                  }}
-                  className=' w-[115px] h-3'
-                />
-              </div>
-            </div>
-            <div className=' '>
-              <span className=' font-medium text-base'>
-                Customer Service - Cozy Earth
-              </span>
-              <div className='flex items-center gap-1'>
-                <span className=' font-bold text-lg'>44</span>
-                <UpIcon />
-                <div
-                  style={{
-                    background:
-                      'linear-gradient(90.26deg, #163143 -24.85%, #69C920 80.53%)',
-                  }}
-                  className=' w-[115px] h-3'
-                />
-              </div>
-            </div>
-            <div className=' '>
-              <span className=' font-medium text-base'>
-                Customer Service - Cozy Earth
-              </span>
-              <div className='flex items-center gap-1'>
-                <span className=' font-bold text-lg'>44</span>
-                <UpIcon />
-                <div
-                  style={{
-                    background:
-                      'linear-gradient(90.26deg, #163143 -24.85%, #69C920 80.53%)',
-                  }}
-                  className=' w-[115px] h-3'
-                />
-              </div>
-            </div>
-            <div className=' '>
-              <span className=' font-medium text-base'>
-                Customer Service - Cozy Earth
-              </span>
-              <div className='flex items-center gap-1'>
-                <span className=' font-bold text-lg'>44</span>
-                <UpIcon />
-                <div
-                  style={{
-                    background:
-                      'linear-gradient(90.26deg, #163143 -24.85%, #69C920 80.53%)',
-                  }}
-                  className=' w-[115px] h-3'
-                />
-              </div>
-            </div>
-            <div className=' '>
-              <span className=' font-medium text-base'>
-                Customer Service - Cozy Earth
-              </span>
-              <div className='flex items-center gap-1'>
-                <span className=' font-bold text-lg'>44</span>
-                <UpIcon />
-                <div
-                  style={{
-                    background:
-                      'linear-gradient(90.26deg, #163143 -24.85%, #69C920 80.53%)',
-                  }}
-                  className=' w-[115px] h-3'
-                />
-              </div>
-            </div>
-            <div className=' '>
-              <span className=' font-medium text-base'>
-                Customer Service - Cozy Earth
-              </span>
-              <div className='flex items-center gap-1'>
-                <span className=' font-bold text-lg'>44</span>
-                <UpIcon />
-                <div
-                  style={{
-                    background:
-                      'linear-gradient(90.26deg, #163143 -24.85%, #69C920 80.53%)',
-                  }}
-                  className=' w-[115px] h-3'
-                />
-              </div>
-            </div>
-            <div className=' '>
-              <span className=' font-medium text-base'>
-                Customer Service - Cozy Earth
-              </span>
-              <div className='flex items-center gap-1'>
-                <span className=' font-bold text-lg'>44</span>
-                <UpIcon />
-                <div
-                  style={{
-                    background:
-                      'linear-gradient(90.26deg, #163143 -24.85%, #69C920 80.53%)',
-                  }}
-                  className=' w-[115px] h-3'
-                />
-              </div>
-            </div>
+          <div className='max-h-[439px] overflow-y-auto pt-4 px-4 flex flex-col gap-6'>
+            <ClientsWithAgents />
           </div>
         </div>
         {/* TOTAL INTERNAL MEMBEERS */}
-        <div className='border rounded-2xl max-w-[350px]  px-3 overflow-y-auto'>
-          <div className='flex items-center py-4 '>
+        <div className='border rounded-2xl max-w-[350px]   overflow-y-auto'>
+          <div className='flex items-center py-4 px-3'>
             <span className=' text-base font-extrabold '>
               Total Internal Members
             </span>
@@ -283,151 +161,8 @@ const AgentsWorkforceReport = async () => {
             </div>
           </div>
           <div className=' h-[2px] w-full bg-[#EFEFEF]' />
-          <div className='max-h-[439px] overflow-y-auto pt-4 px-4'>
-            <div className=' '>
-              <span className=' font-medium text-base'>
-                Customer Service - Cozy Earth
-              </span>
-              <div className='flex items-center gap-1'>
-                <span className=' font-bold text-lg'>44</span>
-                <UpIcon />
-                <div
-                  style={{
-                    background:
-                      'linear-gradient(90.26deg, #163143 -24.85%, #69C920 80.53%)',
-                  }}
-                  className=' w-[115px] h-3'
-                />
-              </div>
-            </div>
-            <div className=' '>
-              <span className=' font-medium text-base'>
-                Customer Service - Cozy Earth
-              </span>
-              <div className='flex items-center gap-1'>
-                <span className=' font-bold text-lg'>44</span>
-                <UpIcon />
-                <div
-                  style={{
-                    background:
-                      'linear-gradient(90.26deg, #163143 -24.85%, #69C920 80.53%)',
-                  }}
-                  className=' w-[115px] h-3'
-                />
-              </div>
-            </div>
-            <div className=' '>
-              <span className=' font-medium text-base'>
-                Customer Service - Cozy Earth
-              </span>
-              <div className='flex items-center gap-1'>
-                <span className=' font-bold text-lg'>44</span>
-                <UpIcon />
-                <div
-                  style={{
-                    background:
-                      'linear-gradient(90.26deg, #163143 -24.85%, #69C920 80.53%)',
-                  }}
-                  className=' w-[115px] h-3'
-                />
-              </div>
-            </div>
-            <div className=' '>
-              <span className=' font-medium text-base'>
-                Customer Service - Cozy Earth
-              </span>
-              <div className='flex items-center gap-1'>
-                <span className=' font-bold text-lg'>44</span>
-                <UpIcon />
-                <div
-                  style={{
-                    background:
-                      'linear-gradient(90.26deg, #163143 -24.85%, #69C920 80.53%)',
-                  }}
-                  className=' w-[115px] h-3'
-                />
-              </div>
-            </div>
-            <div className=' '>
-              <span className=' font-medium text-base'>
-                Customer Service - Cozy Earth
-              </span>
-              <div className='flex items-center gap-1'>
-                <span className=' font-bold text-lg'>44</span>
-                <UpIcon />
-                <div
-                  style={{
-                    background:
-                      'linear-gradient(90.26deg, #163143 -24.85%, #69C920 80.53%)',
-                  }}
-                  className=' w-[115px] h-3'
-                />
-              </div>
-            </div>
-            <div className=' '>
-              <span className=' font-medium text-base'>
-                Customer Service - Cozy Earth
-              </span>
-              <div className='flex items-center gap-1'>
-                <span className=' font-bold text-lg'>44</span>
-                <UpIcon />
-                <div
-                  style={{
-                    background:
-                      'linear-gradient(90.26deg, #163143 -24.85%, #69C920 80.53%)',
-                  }}
-                  className=' w-[115px] h-3'
-                />
-              </div>
-            </div>
-            <div className=' '>
-              <span className=' font-medium text-base'>
-                Customer Service - Cozy Earth
-              </span>
-              <div className='flex items-center gap-1'>
-                <span className=' font-bold text-lg'>44</span>
-                <UpIcon />
-                <div
-                  style={{
-                    background:
-                      'linear-gradient(90.26deg, #163143 -24.85%, #69C920 80.53%)',
-                  }}
-                  className=' w-[115px] h-3'
-                />
-              </div>
-            </div>
-            <div className=' '>
-              <span className=' font-medium text-base'>
-                Customer Service - Cozy Earth
-              </span>
-              <div className='flex items-center gap-1'>
-                <span className=' font-bold text-lg'>44</span>
-                <UpIcon />
-                <div
-                  style={{
-                    background:
-                      'linear-gradient(90.26deg, #163143 -24.85%, #69C920 80.53%)',
-                  }}
-                  className=' w-[115px] h-3'
-                />
-              </div>
-            </div>
-            <div className=' '>
-              <span className=' font-medium text-base'>
-                Customer Service - Cozy Earth
-              </span>
-              <div className='flex items-center gap-1'>
-                <span className=' font-bold text-lg'>44</span>
-                <UpIcon />
-                <div
-                  style={{
-                    background:
-                      'linear-gradient(90.26deg, #163143 -24.85%, #69C920 80.53%)',
-                  }}
-                  className=' w-[115px] h-3'
-                />
-              </div>
-            </div>
+          <div className='max-h-[439px] overflow-y-auto pt-4 px-4 flex flex-col gap-6'>
+            <TotalInternalMembers />
           </div>
         </div>
         {/* Abandoned Late Missed Ontime shifts by Percentage and Count */}
@@ -443,12 +178,13 @@ const AgentsWorkforceReport = async () => {
           </div>
           <div className=' h-[2px] w-full bg-[#EFEFEF]' />
           <div className='h-[439px] overflow-y-auto pt-4 px-4'>
-            <MyResponsivePie data={PieChartData} />
+            <AbandonedLateOntimeShifts />
+            {/* <MyResponsivePie data={PieChartData} /> */}
           </div>
         </div>
       </div>
-      {/* HOURS BILLED PER CLIENT */}
-      <div className=' text-[#163143]  border rounded-2xl mt-10   '>
+      {/* HOURS BILLED Monthly PER CLIENT */}
+      <div className=' text-[#163143]  border rounded-2xl mt-10  min-h-[480px]  '>
         <div className='flex items-center py-4 px-4 '>
           <h3 className=' font-extrabold text-base'>Hours Billed Per Client</h3>
           <div className='flex ml-auto gap-3 items-center'>
@@ -457,84 +193,10 @@ const AgentsWorkforceReport = async () => {
           </div>
         </div>
         <div className=' h-[2px] w-full bg-[#EFEFEF]' />
-        <div className='divide-x flex '>
-          <div className='flex flex-col gap-6 text-base font-medium pt-4 max-h-[480px] overflow-y-auto'>
-            <div className='flex gap-16 pl-4 pr-9 '>
-              <span>Hotel Collection</span>
-              <span>18,281</span>
-            </div>
-            <div className='flex gap-16 pl-4 pr-9 '>
-              <span>Hotel Collection</span>
-              <span>18,281</span>
-            </div>{' '}
-            <div className='flex gap-16 pl-4 pr-9 '>
-              <span>Hotel Collection</span>
-              <span>18,281</span>
-            </div>{' '}
-            <div className='flex gap-16 pl-4 pr-9 '>
-              <span>Hotel Collection</span>
-              <span>18,281</span>
-            </div>{' '}
-            <div className='flex gap-16 pl-4 pr-9 '>
-              <span>Hotel Collection</span>
-              <span>18,281</span>
-            </div>{' '}
-            <div className='flex gap-16 pl-4 pr-9 '>
-              <span>Hotel Collection</span>
-              <span>18,281</span>
-            </div>{' '}
-            <div className='flex gap-16 pl-4 pr-9 '>
-              <span>Hotel Collection</span>
-              <span>18,281</span>
-            </div>{' '}
-            <div className='flex gap-16 pl-4 pr-9 '>
-              <span>Hotel Collection</span>
-              <span>18,281</span>
-            </div>{' '}
-            <div className='flex gap-16 pl-4 pr-9 '>
-              <span>Hotel Collection</span>
-              <span>18,281</span>
-            </div>{' '}
-            <div className='flex gap-16 pl-4 pr-9 '>
-              <span>Hotel Collection</span>
-              <span>18,281</span>
-            </div>{' '}
-            <div className='flex gap-16 pl-4 pr-9 '>
-              <span>Hotel Collection</span>
-              <span>18,281</span>
-            </div>{' '}
-            <div className='flex gap-16 pl-4 pr-9 '>
-              <span>Hotel Collection</span>
-              <span>18,281</span>
-            </div>{' '}
-            <div className='flex gap-16 pl-4 pr-9 '>
-              <span>Hotel Collection</span>
-              <span>18,281</span>
-            </div>{' '}
-            <div className='flex gap-16 pl-4 pr-9 '>
-              <span>Hotel Collection</span>
-              <span>18,281</span>
-            </div>{' '}
-            <div className='flex gap-16 pl-4 pr-9 '>
-              <span>Hotel Collection</span>
-              <span>18,281</span>
-            </div>{' '}
-            <div className='flex gap-16 pl-4 pr-9 '>
-              <span>Hotel Collection</span>
-              <span>18,281</span>
-            </div>{' '}
-            <div className='flex gap-16 pl-4 pr-9 '>
-              <span>Hotel Collection</span>
-              <span>18,281</span>
-            </div>
-          </div>
-          <div className=' flex-1 mx-auto max-h-[480px]'>
-            <BarComponent />
-          </div>
-        </div>
+        <HoursBilledLastMonth />
       </div>
-      {/* HOURS BILLED PER CLIENT */}
-      <div className=' text-[#163143]  border rounded-2xl mt-10   '>
+      {/* Rolling Avg. Internal Team Activity Report  */}
+      <div className=' text-[#163143]  border rounded-2xl mt-10 min-h-[480px]   '>
         <div className='flex items-center py-4 px-4 '>
           <h3 className=' font-extrabold text-base'>
             Rolling Avg. Internal Team Activity Report (Select Due Filter)
@@ -546,8 +208,104 @@ const AgentsWorkforceReport = async () => {
         </div>
         <div className=' h-[2px] w-full bg-[#EFEFEF]' />
 
-        <div className=' h-[480px] overflow-x-auto w-full '>
-          <BarComponent2 />
+        <div className=' overflow-x-auto  '>
+          <InternalTeamReportAVG />
+        </div>
+      </div>
+      {/* AGENTS ACTIVITY REPORT */}
+      <div className='pt-11  px-7 grid grid-cols-2 gap-10'>
+        {/* Agents High Activity Report */}
+        <div className=' text-[#163143]  border rounded-2xl mt-10  max-h-[500px] overflow-y-auto '>
+          <div className='flex items-center py-4 px-4 '>
+            <h3 className=' font-extrabold text-base'>
+              High Activity Rate Report (Agents)
+            </h3>
+            <div className='flex ml-auto gap-3 items-center'>
+              <ExpandIcon />
+              <SettingIcon />
+            </div>
+          </div>
+          <div className=' h-[2px] w-full bg-[#EFEFEF]' />
+          <div className='flex   gap-4 py-4'>
+            <div className=' flex items-center pl-3 gap-4'>
+              <div
+                style={{
+                  background:
+                    'linear-gradient(90.26deg, #163143 -24.85%, #69C920 80.53%)',
+                }}
+                className='w-[21px] h-[8px] '
+              />
+              <span className=' font-medium'>High Activity Rate</span>
+            </div>
+            <div className='flex items-center ml-auto gap-4 pr-4 '>
+              <button className='flex items-center  text-[#163143] bg-[#F8F9FA] rounded-full py-[10px] px-[15px]'>
+                {' '}
+                Download
+              </button>
+              <button className='flex items-center  text-[#163143] bg-[#F8F9FA] rounded-full  py-[10px] px-[15px]'>
+                {' '}
+                Sort <ChevronDownIcon className='ml-2' />
+              </button>
+            </div>
+          </div>
+          <div className='  overflow-y-auto w-full '>
+            <AgentsHighActivityReport />
+          </div>
+        </div>
+        {/* Agents Low Activity Report */}
+        <div className=' text-[#163143]  border rounded-2xl mt-10  max-h-[500px] overflow-y-auto '>
+          <div className='flex items-center py-4 px-4 '>
+            <h3 className=' font-extrabold text-base'>
+              Low Activity Rate Report (Agents)
+            </h3>
+            <div className='flex ml-auto gap-3 items-center'>
+              <ExpandIcon />
+              <SettingIcon />
+            </div>
+          </div>
+          <div className=' h-[2px] w-full bg-[#EFEFEF]' />
+          <div className='flex   gap-4 py-4'>
+            <div className=' flex items-center pl-3 gap-4'>
+              <div
+                style={{
+                  background:
+                    'linear-gradient(270.46deg, #163143 -6.83%, #698CA4 143.02%)',
+                }}
+                className='w-[21px] h-[8px] '
+              />
+              <span className=' font-medium'>Low Activity Rate</span>
+            </div>
+            <div className='flex items-center ml-auto gap-4 pr-4 '>
+              <button className='flex items-center  text-[#163143] bg-[#F8F9FA] rounded-full py-[10px] px-[15px]'>
+                {' '}
+                Download
+              </button>
+              <button className='flex items-center  text-[#163143] bg-[#F8F9FA] rounded-full  py-[10px] px-[15px]'>
+                {' '}
+                Sort <ChevronDownIcon className='ml-2' />
+              </button>
+            </div>
+          </div>
+          <div className='  overflow-y-auto w-full '>
+            <AgentsLowActivityReport />
+          </div>
+        </div>
+        {/*Internal Team Activity Rate  */}
+      </div>
+      <div className=' text-[#163143]  border rounded-2xl mt-10 min-h-[480px]   '>
+        <div className='flex items-center py-4 px-4 '>
+          <h3 className=' font-extrabold text-base'>
+            Internal Team Activity Rate
+          </h3>
+          <div className='flex ml-auto gap-3 items-center'>
+            <ExpandIcon />
+            <SettingIcon />
+          </div>
+        </div>
+        <div className=' h-[2px] w-full bg-[#EFEFEF]' />
+
+        <div className=' overflow-auto max-h-[550px]  '>
+          <InternalTeamActivityRate />
         </div>
       </div>
     </section>

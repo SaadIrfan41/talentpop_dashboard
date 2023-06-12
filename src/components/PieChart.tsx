@@ -8,9 +8,13 @@ import React from 'react'
 // no chart will be rendered.
 // website examples showcase many properties,
 // you'll often use just a few of them.
-const MyResponsivePie = ({ data }: any) => (
+
+const MyResponsivePie = ({ formatedData }: any) => (
   <ResponsivePie
-    data={data}
+    // colors={'#133418'}
+    colors={formatedData.map((item: any) => item.color)}
+    theme={{ legends: { text: { fontSize: 16 } }, fontSize: 16 }}
+    data={formatedData}
     margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
     innerRadius={0.5}
     padAngle={0.7}
@@ -21,14 +25,15 @@ const MyResponsivePie = ({ data }: any) => (
       from: 'color',
       modifiers: [['darker', 0.2]],
     }}
-    arcLinkLabelsSkipAngle={10}
-    arcLinkLabelsTextColor='#333333'
-    arcLinkLabelsThickness={2}
+    // arcLinkLabelsSkipAngle={10}
+    // arcLinkLabelsTextColor='#333333'
+
+    arcLinkLabelsThickness={5}
     arcLinkLabelsColor={{ from: 'color' }}
     arcLabelsSkipAngle={10}
     arcLabelsTextColor={{
       from: 'color',
-      modifiers: [['darker', 2]],
+      modifiers: [['opacity', 0]],
     }}
     defs={[
       {
@@ -36,7 +41,7 @@ const MyResponsivePie = ({ data }: any) => (
         type: 'patternDots',
         background: 'inherit',
         color: 'rgba(255, 255, 255, 0.3)',
-        size: 4,
+        size: 2,
         padding: 1,
         stagger: true,
       },
@@ -108,11 +113,12 @@ const MyResponsivePie = ({ data }: any) => (
         translateX: 0,
         translateY: 56,
         itemsSpacing: 0,
-        itemWidth: 100,
+        itemWidth: 120,
         itemHeight: 18,
         itemTextColor: '#999',
         itemDirection: 'left-to-right',
         itemOpacity: 1,
+
         symbolSize: 18,
         symbolShape: 'circle',
         effects: [

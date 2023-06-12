@@ -18,7 +18,7 @@ const TotalInternalTeamMembers = () => {
     queryKey: ['total-internal-team-members'],
     queryFn: () => getTotalInternalTeamMembers(),
   })
-  if (isLoading) return <Skeleton className='w-[100px] h-[50px] rounded-2xl' />
+  if (isLoading) return <p className=' text-base text-[#69C920]'>Loading...</p>
 
   console.log(data.data[0]?.sum_count_user_id)
   return (

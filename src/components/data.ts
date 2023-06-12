@@ -1,9 +1,9 @@
 export const PieChartData = [
   {
-    id: 'haskell',
-    label: 'haskell',
+    id: 'Ontime',
+    label: 'Ontime',
     value: 526,
-    color: 'hsl(328, 70%, 50%)',
+    color: 'hsl(129, 46%, 14%)',
   },
   {
     id: 'sass',
