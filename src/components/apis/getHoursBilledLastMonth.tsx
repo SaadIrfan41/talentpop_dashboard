@@ -25,15 +25,15 @@ const HoursBilledLastMonth = () => {
     )
 
   //   console.log(data.data[0]?.count_user_id)
-  const getHours = (hoursdata: string) => {
-    const billableHrs: string = hoursdata
-    const hrsIndex: number = billableHrs?.indexOf('hrs')
-    const hrsValue: string = billableHrs?.substring(0, hrsIndex)
-    return hrsValue
-  }
-  const clientName: string[] = data.data.map((obj: any) => obj['hoc.name'])
+  // const getHours = (hoursdata: string) => {
+  //   const billableHrs: string = hoursdata
+  //   const hrsIndex: number = billableHrs?.indexOf('hrs')
+  //   const hrsValue: string = billableHrs?.substring(0, hrsIndex)
+  //   return hrsValue
+  // }
+  const clientName: string[] = data.data.map((obj: any) => obj['hop.name'])
   const billableHrs: string[] = data.data.map((obj: any) =>
-    getHours(obj['Billable_Hrs'])
+    obj['summed_hours'].toFixed(2)
   )
   //   console.log(clientName, billableHrs)
   return (
@@ -49,8 +49,8 @@ const HoursBilledLastMonth = () => {
           //     <span className=' ml-auto'>{billableHrs[index]}</span>
           //   </div>
           <div key={index} className='flex gap-16 pl-4 pr-9  '>
-            <span>{data['hoc.name']}</span>
-            <span className=' ml-auto'>{getHours(data.Billable_Hrs)}</span>
+            <span>{data['hop.name']}</span>
+            <span className=' ml-auto'>{data['summed_hours'].toFixed(2)}</span>
           </div>
         ))}
       </div>

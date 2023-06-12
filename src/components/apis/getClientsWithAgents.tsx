@@ -18,7 +18,7 @@ const ClientsWithAgents = () => {
   if (isLoading)
     return <p className=' text-base text-[#69C920] font-bold'>Loading...</p>
 
-  console.log(data)
+  // console.log(data)
   return (
     <>
       {data.data.map((data: any, index: number) => (

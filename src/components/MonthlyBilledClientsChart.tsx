@@ -31,7 +31,7 @@ function createGradient(ctx: CanvasRenderingContext2D, area: ChartArea) {
   return gradient
 }
 
-export const options = {
+const options = {
   // indexAxis: 'x' as const,
   maintainAspectRatio: false,
   elements: {
@@ -39,7 +39,13 @@ export const options = {
       borderWidth: 2,
     },
   },
-
+  scales: {
+    x: {
+      ticks: {
+        display: false, // Hide x-axis labels
+      },
+    },
+  },
   plugins: {
     legend: {
       display: false,

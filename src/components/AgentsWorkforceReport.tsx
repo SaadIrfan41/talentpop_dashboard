@@ -1,15 +1,5 @@
 import React from 'react'
-import {
-  ExpandIcon,
-  SettingIcon,
-  StatsNegativeIcon,
-  StatsPositiveIcon,
-  UpIcon,
-} from './Icons/icons'
-import { PieChartData } from './data'
-// import MyResponsivePie from './PieChart'
-
-import dynamic from 'next/dynamic'
+import { ExpandIcon, SettingIcon } from './Icons/icons'
 
 import getQueryClient from '@/utils/getQueryClient'
 import { dehydrate } from '@tanstack/query-core'
@@ -18,27 +8,19 @@ import TotalActiveAgents, {
   getTotalActiveAgents,
 } from './apis/getTotalActiveAgents'
 import Hydrate from '@/utils/hydrate.client'
-import TotalInternalTeamMembers, {
-  getTotalInternalTeamMembers,
-} from './apis/getTotalInternalTeamsMember'
+import TotalInternalTeamMembers from './apis/getTotalInternalTeamsMember'
 import ClientsWithAgents from './apis/getClientsWithAgents'
 import TotalInternalMembers from './apis/getTotalInternalMembers'
 import HoursBilledLastMonth from './apis/getHoursBilledLastMonth'
 import AgentsHighActivityReport from './apis/getAgentsHighActivityReport'
 import { ChevronDownIcon } from 'lucide-react'
-import { HighActivityChart } from './HorizontalBarChart'
 import AgentsLowActivityReport from './apis/getAgentsLowActivityReport'
-import { InternalTeamActivityChart } from './InternalTeamActivityChart'
 import InternalTeamReportAVG from './apis/getInternalTeamReport'
 import InternalTeamActivityRate from './apis/getInternalTeamActivityRate'
 import AbandonedLateOntimeShifts from './apis/getAbandonedLateOntimeShifts'
 import TotalBilledHours from './apis/getTotalBilledHours'
 import AverageAgentActivity from './apis/getAverageAgentActivity'
 import AverageInternalTeamActivity from './apis/getAverageInternalTeamActivity'
-
-const MyResponsivePie = dynamic(() => import('./PieChart'), {
-  ssr: false,
-})
 
 // const getTotalActiveAgents = async () => {
 //   const res = await fetch(
@@ -48,6 +30,10 @@ const MyResponsivePie = dynamic(() => import('./PieChart'), {
 //   return agents_count
 // }
 const AgentsWorkforceReport = async () => {
+  // const queryClient = getQueryClient()
+  // await queryClient.prefetchQuery(['total-active-agents'], getTotalActiveAgents)
+  // const dehydratedState = dehydrate(queryClient)
+
   // const { data, isLoading } = useQuery({
   //   queryKey: ['total-active-agents'],
   //   queryFn: () => getTotalActiveAgents(),
@@ -64,12 +50,12 @@ const AgentsWorkforceReport = async () => {
 
   //   getTotalInternalTeamMembers,
   // )
-  // const dehydratedState = dehydrate(queryClient)
+
   // console.log(dehydratedState)
   return (
     <section className=' pt-11 border px-7 pb-20  rounded-tr-2xl rounded-b-2xl'>
       <div className=' flex  gap-7  text-[#163143] justify-around'>
-        <div className=' pt-4 border flex flex-col text-center w-[241px] rounded-2xl'>
+        <div className=' pt-4 border flex flex-col text-center min-w-[241px] px-[50px] rounded-2xl'>
           <span className=' mb-4 capitalize text-base font-extrabold '>
             Total Active Agents
           </span>
@@ -83,7 +69,7 @@ const AgentsWorkforceReport = async () => {
             </span>
           </div>
         </div>
-        <div className=' pt-4 border flex flex-col text-center w-[241px] rounded-2xl'>
+        <div className=' pt-4 border flex flex-col text-center min-w-[241px] px-[50px] rounded-2xl'>
           <span className=' mb-4 capitalize text-base font-extrabold '>
             Total Internal Members
           </span>
@@ -95,7 +81,7 @@ const AgentsWorkforceReport = async () => {
             </span>
           </div>
         </div>
-        <div className=' pt-4 border flex flex-col text-center w-[241px] rounded-2xl'>
+        <div className=' pt-4 border flex flex-col text-center min-w-[241px] px-[50px] rounded-2xl'>
           <span className=' mb-4 capitalize text-base font-extrabold '>
             Total Billed Hours
           </span>
@@ -107,7 +93,7 @@ const AgentsWorkforceReport = async () => {
             </span>
           </div>
         </div>
-        <div className=' pt-4 border flex flex-col text-center w-[241px] rounded-2xl'>
+        <div className=' pt-4 border flex flex-col text-center min-w-[241px] px-[50px] rounded-2xl'>
           <span className=' mb-4 capitalize text-base font-extrabold '>
             Avg. Agent Activity
           </span>
@@ -119,7 +105,7 @@ const AgentsWorkforceReport = async () => {
             </span>
           </div>
         </div>
-        <div className=' pt-4 border flex flex-col text-center w-[241px] rounded-2xl'>
+        <div className=' pt-4 border flex flex-col text-center min-w-[241px] px-[50px] rounded-2xl'>
           <span className=' mb-4 capitalize text-base font-extrabold '>
             Avg. Internal Team Activity
           </span>
