@@ -1,36 +1,38 @@
-import React from 'react'
-import Logo from '../../public/logo.png'
-import Image from 'next/image'
-import { ChevronDown, RefreshCw } from 'lucide-react'
-import ReportingMenu from '@/components/ReportingMenu'
+import React from "react";
+import Logo from "../../public/logo.png";
+import Image from "next/image";
+import { ChevronDown, RefreshCw } from "lucide-react";
+import ReportingMenu from "@/components/ReportingMenu";
+import LogoutButton from "@/components/LogoutButton";
+
 const HomePage = () => {
   return (
-    <div className=' bg-[#FAFFFF] pb-20'>
-      <header className=' border-b-2 border-[#EBEBEB]'>
-        <nav className=' pl-6 pr-16 flex py-5 items-center gap-16'>
-          <Image src={Logo} alt='Logo' />
-          <div className=' font-bold text-lg text-[#163143] flex items-center'>
+    <div className=" bg-[#FAFFFF] pb-20">
+      <header className=" border-b-2 border-[#EBEBEB]">
+        <nav className=" flex items-center gap-16 py-5 pl-6 pr-16">
+          <Image src={Logo} alt="Logo" />
+          <div className=" flex items-center text-lg font-bold text-[#163143]">
             All reports <ChevronDown />
           </div>
-          <div className=' font-normal text-base ml-auto'>Sign out</div>
+          <LogoutButton />
         </nav>
       </header>
-      <section className=' pl-10 pr-16'>
-        <div className='flex pt-10 items-center'>
-          <h1 className='  font-extrabold text-2xl text-[#343434] '>
+      <section className=" pl-10 pr-16">
+        <div className="flex items-center pt-10">
+          <h1 className="  text-2xl font-extrabold text-[#343434] ">
             Agent workforce report
           </h1>
-          <button className='flex items-center ml-auto text-white bg-[#69C920] rounded-full py-3 px-4'>
-            {' '}
-            Refresh Report <RefreshCw className='ml-2' />{' '}
+          <button className="ml-auto flex items-center rounded-full bg-[#69C920] px-4 py-3 text-white">
+            {" "}
+            Refresh Report <RefreshCw className="ml-2" />{" "}
           </button>
         </div>
       </section>
-      <section className='ml-10 mr-16 pt-6 bg-white'>
+      <section className="ml-10 mr-16 bg-white pt-6">
         <ReportingMenu />
       </section>
     </div>
-  )
-}
+  );
+};
 
-export default HomePage
+export default HomePage;
