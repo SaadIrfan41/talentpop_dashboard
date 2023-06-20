@@ -1,43 +1,61 @@
-import React from 'react'
-import { UpIcon } from '../Icons/icons'
-import { useQuery } from '@tanstack/react-query'
+import React from "react";
+import { UpIcon } from "../Icons/icons";
+import { useQuery } from "@tanstack/react-query";
+import { CookieValueTypes, getCookie, hasCookie } from "cookies-next";
 
 export const getClienWithAgentsCount = async () => {
+  let accessToken: CookieValueTypes = "";
+  if (hasCookie("talentPOP_token")) {
+    accessToken = getCookie("talentPOP_token");
+  }
   const res = await fetch(
-    'https://reporting.hotel3lue3ijq.us-east-1.cs.amazonlightsail.com/active-agents-by-client'
-  )
-  const data = await res.json()
-  return data
-}
+    "https://reporting.hotel3lue3ijq.us-east-1.cs.amazonlightsail.com/active-agents-by-client",
+    {
+      headers: {
+        accept: "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+  const data = await res.json();
+  if (res.status === 401) {
+    return { message: "Not authenticated" };
+  }
+  return data;
+};
 
 const ClientsWithAgents = () => {
-  const { data, isLoading } = useQuery({
-    queryKey: ['clients-with-agents'],
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["clients-with-agents"],
     queryFn: () => getClienWithAgentsCount(),
-  })
+  });
   if (isLoading)
-    return <p className=' text-base text-[#69C920] font-bold'>Loading...</p>
-
+    return <p className=" text-base font-bold text-[#69C920]">Loading...</p>;
+  if (error) return <p className=" text-base text-[#69C920]">Error</p>;
+  if (data.message === "Not authenticated")
+    return (
+      <p className=" text-base text-[#69C920]">Login Credentials Invalid</p>
+    );
   // console.log(data)
   return (
     <>
       {data.data.map((data: any, index: number) => (
         <div key={index}>
-          <span className=' font-medium text-base'>
-            {data['hop.name'] ? data['hop.name'] : 'No Name'}
+          <span className=" text-base font-medium">
+            {data["hop.name"] ? data["hop.name"] : "No Name"}
           </span>
-          <div className='flex items-center gap-1'>
-            <span className=' font-bold text-lg'>
+          <div className="flex items-center gap-1">
+            <span className=" text-lg font-bold">
               {data.count_hubstaff_all_users}
             </span>
             <UpIcon />
             <div
               style={{
                 background:
-                  'linear-gradient(90.26deg, #163143 -24.85%, #69C920 80.53%)',
+                  "linear-gradient(90.26deg, #163143 -24.85%, #69C920 80.53%)",
                 width:
                   data.count_hubstaff_all_users > 100
-                    ? '100%'
+                    ? "100%"
                     : `${data.count_hubstaff_all_users}%`,
               }}
               className={` h-3`}
@@ -46,7 +64,7 @@ const ClientsWithAgents = () => {
         </div>
       ))}
     </>
-  )
-}
+  );
+};
 
-export default ClientsWithAgents
+export default ClientsWithAgents;
