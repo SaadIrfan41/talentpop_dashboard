@@ -7,7 +7,9 @@
    border-top: 1px solid #ccc;
    font-weight: bold;
  } */
-
+input[type='checkbox'] {
+  accent-color: green;
+}
 @layer base {
   :root {
     --background: 0 0% 100%;

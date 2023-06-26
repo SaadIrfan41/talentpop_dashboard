@@ -7,7 +7,13 @@ import { ExpandIcon, SettingIcon } from "../Icons/icons";
 import { CookieValueTypes, getCookie, hasCookie } from "cookies-next";
 import { useFiltersStore } from "@/store/useFiltersStore";
 
-const getAgentHighActivityReport = async (filterClientName: string[]) => {
+const getAgentHighActivityReport = async (
+  filterClientName: string[],
+  filterAgentsName: string[],
+  filterTeamLeadsName: string[],
+  filterOMsName: string[],
+  filterCSMsName: string[]
+) => {
   let accessToken: CookieValueTypes = "";
   if (hasCookie("talentPOP_token")) {
     accessToken = getCookie("talentPOP_token");
@@ -16,6 +22,10 @@ const getAgentHighActivityReport = async (filterClientName: string[]) => {
     const res = await fetch(
       `http://18.237.25.116:8000/high-activity-rate-report-agents?client=${
         filterClientName[0] || ""
+      }&agentname=${filterAgentsName[0] || ""}&teamlead=${
+        filterTeamLeadsName[0] || ""
+      }&operationmanager=${filterOMsName[0] || ""}&customersuccessmanager=${
+        filterCSMsName[0] || ""
       }`,
       {
         headers: {
@@ -36,10 +46,32 @@ const getAgentHighActivityReport = async (filterClientName: string[]) => {
   }
 };
 const AgentsHighActivityReport = () => {
-  const { filterClientName } = useFiltersStore();
+  const {
+    filterClientName,
+    filterAgentsName,
+    filterCSMsName,
+    filterOMsName,
+    filterTeamLeadsName,
+  } = useFiltersStore();
   const { data, isLoading, error } = useQuery({
-    queryKey: ["agents-high-activity-report", filterClientName],
-    queryFn: () => getAgentHighActivityReport(filterClientName),
+    queryKey: [
+      "agents-high-activity-report",
+      filterClientName,
+      filterAgentsName,
+      filterTeamLeadsName,
+      filterOMsName,
+
+      filterCSMsName,
+    ],
+    queryFn: () =>
+      getAgentHighActivityReport(
+        filterClientName,
+        filterAgentsName,
+        filterTeamLeadsName,
+        filterOMsName,
+
+        filterCSMsName
+      ),
   });
   if (isLoading)
     return (

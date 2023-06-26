@@ -5,7 +5,13 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { StatsPositiveIcon } from "../Icons/icons";
 import { CookieValueTypes, getCookie, hasCookie } from "cookies-next";
 import { useFiltersStore } from "@/store/useFiltersStore";
-export const getTotalActiveAgents = async (filterClientName: string[]) => {
+export const getTotalActiveAgents = async (
+  filterClientName: string[],
+  filterAgentsName: string[],
+  filterTeamLeadsName: string[],
+  filterOMsName: string[],
+  filterCSMsName: string[]
+) => {
   try {
     let accessToken: CookieValueTypes = "";
     if (hasCookie("talentPOP_token")) {
@@ -15,6 +21,10 @@ export const getTotalActiveAgents = async (filterClientName: string[]) => {
     const res = await fetch(
       `http://18.237.25.116:8000/active-agents?client=${
         filterClientName[0] || ""
+      }&agentname=${filterAgentsName[0] || ""}&teamlead=${
+        filterTeamLeadsName[0] || ""
+      }&operationmanager=${filterOMsName[0] || ""}&customersuccessmanager=${
+        filterCSMsName[0] || ""
       }`,
       {
         headers: {
@@ -35,11 +45,33 @@ export const getTotalActiveAgents = async (filterClientName: string[]) => {
   }
 };
 const TotalActiveAgents = () => {
-  const { filterClientName } = useFiltersStore();
+  const {
+    filterClientName,
+    filterAgentsName,
+    filterCSMsName,
+    filterOMsName,
+    filterTeamLeadsName,
+  } = useFiltersStore();
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["total-active-agents", filterClientName],
-    queryFn: () => getTotalActiveAgents(filterClientName),
+    queryKey: [
+      "total-active-agents",
+      filterClientName,
+      filterAgentsName,
+      filterTeamLeadsName,
+      filterOMsName,
+
+      filterCSMsName,
+    ],
+    queryFn: () =>
+      getTotalActiveAgents(
+        filterClientName,
+        filterAgentsName,
+        filterTeamLeadsName,
+        filterOMsName,
+
+        filterCSMsName
+      ),
   });
 
   if (isLoading) return <p className=" text-base text-[#69C920]">Loading...</p>;

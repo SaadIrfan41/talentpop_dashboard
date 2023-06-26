@@ -5,12 +5,12 @@ import { CookieValueTypes, getCookie, hasCookie } from "cookies-next";
 import { ChevronDown, ChevronUp, Search, X } from "lucide-react";
 import React, { Fragment, useEffect, useRef, useState } from "react";
 
-const ClientsNameFilter = () => {
+const AgentsNameFilter = () => {
   const { data, isLoading, error } = useQuery({
-    queryKey: ["client-names-for-filter"],
-    queryFn: () => getCientNames(),
+    queryKey: ["agents-names-for-filter"],
+    queryFn: () => getAgentsNames(),
   });
-  const getCientNames = async () => {
+  const getAgentsNames = async () => {
     try {
       let accessToken: CookieValueTypes = "";
       if (hasCookie("talentPOP_token")) {
@@ -18,7 +18,7 @@ const ClientsNameFilter = () => {
       }
       // const accessToken = getCookie("talentPOP_token");
       const res = await fetch(
-        "http://18.237.25.116:8000/get-client-names-for-filter",
+        "http://18.237.25.116:8000/get-agent-names-for-filter",
         {
           headers: {
             accept: "application/json",
@@ -41,7 +41,7 @@ const ClientsNameFilter = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [selectedAlphabet, setSelectedAlphabet] = useState("A");
   const [showModal, setshowModal] = useState(false);
-  const { addClientNames } = useFiltersStore();
+  const { addAgentsNames } = useFiltersStore();
   useEffect(() => {
     if (data) {
       setFilteredData(data);
@@ -53,8 +53,8 @@ const ClientsNameFilter = () => {
 
     const filteredNames = data.filter((item: any) => {
       const name =
-        item["hop.name"] === null ? "No Name" : item["hop.name"].toLowerCase();
-      const firstChar = name?.charAt(name.indexOf("-") + 2);
+        item["name"] === null ? "No Name" : item["name"].toLowerCase();
+      const firstChar = name[0];
       return firstChar.toLowerCase() === alphabet.toLowerCase();
     });
     setFilteredData(filteredNames);
@@ -65,13 +65,14 @@ const ClientsNameFilter = () => {
     // setSearchText(searchText);
 
     const filteredNames = data.filter((item: any) =>
-      item["hop.name"]?.toLowerCase().includes(searchText.toLowerCase())
+      item["name"]?.toLowerCase().includes(searchText.toLowerCase())
     );
     setFilteredData(filteredNames);
   };
 
   const handleNameCheckboxChange = (event: any, name: any) => {
     const isChecked = event.target.checked;
+    console.log(name, isChecked);
     if (isChecked) {
       //@ts-ignore
       setSelectedNames([...selectedNames, name]);
@@ -91,13 +92,16 @@ const ClientsNameFilter = () => {
     let currentAlphabet: any = null;
 
     return filteredData.map((item: any, index: any) => {
-      const name = item["hop.name"] === null ? "No Name" : item["hop.name"];
+      const name = item["name"] === null ? "No Name" : item["name"];
       // console.log("NAME",name);
       let firstChar;
-      firstChar = name?.charAt(name?.indexOf("-") + 2)?.toUpperCase();
-
-      if (firstChar === " ") {
-        firstChar = name?.charAt(name?.indexOf("-") + 3)?.toUpperCase();
+      //   firstChar = name[0]?.toUpperCase();
+      const match = name?.match(/[A-Za-z]/);
+      //   if (firstChar === " ") {
+      //     firstChar = name[0]?.toUpperCase();
+      //   }
+      if (match) {
+        firstChar = match[0];
       }
 
       // Check if the first character is different from the current alphabet
@@ -116,37 +120,17 @@ const ClientsNameFilter = () => {
               <li key={`name-${index}`} className=" flex gap-x-2 text-sm">
                 <div className=" pt-[2px]">
                   <input
-                    // style={{
-                    //   accentColor: "#69C920",
-                    // }}
                     type="checkbox"
-                    className="pt-3 text-white"
+                    className="pt-3"
                     checked={selectedNames.includes(
                       //@ts-ignore
-                      `${name?.split("-")[1]?.trim()}`
+                      `${name}`
                     )}
-                    onChange={(event) =>
-                      handleNameCheckboxChange(
-                        event,
-                        name.replace(
-                          "Customer Service - " ||
-                            "TalentPop - " ||
-                            "TalentPop - Agent Internal Meetings - ",
-                          ""
-                        )
-                      )
-                    }
+                    onChange={(event) => handleNameCheckboxChange(event, name)}
                   />
                 </div>
 
-                <span>
-                  {name.replace(
-                    "Customer Service - " ||
-                      "TalentPop - " ||
-                      "TalentPop - Agent Internal Meetings - ",
-                    ""
-                  )}
-                </span>
+                <span>{name}</span>
               </li>
             </div>
           </Fragment>
@@ -161,31 +145,14 @@ const ClientsNameFilter = () => {
               //@ts-ignore
               checked={selectedNames.includes(
                 //@ts-ignore
-                `${name.split("-")[1]?.trim()}`
+                `${name}`
               )}
               className="pt-3"
-              onChange={(event) =>
-                handleNameCheckboxChange(
-                  event,
-                  name.replace(
-                    "Customer Service - " ||
-                      "TalentPop - " ||
-                      "TalentPop - Agent Internal Meetings - ",
-                    ""
-                  )
-                )
-              }
+              onChange={(event) => handleNameCheckboxChange(event, name)}
             />
           </div>
 
-          <span>
-            {name.replace(
-              "Customer Service - " ||
-                "TalentPop - " ||
-                "TalentPop - Agent Internal Meetings - ",
-              ""
-            )}
-          </span>
+          <span>{name}</span>
         </li>
       );
     });
@@ -207,7 +174,7 @@ const ClientsNameFilter = () => {
         onClick={() => setshowModal(!showModal)}
         className=" relative flex items-center rounded-full border py-1 pl-3 text-sm font-bold text-[#163143]"
       >
-        Clients{" "}
+        Agents{" "}
         {selectedNames.length > 0 && (
           <span className="flex h-[15px] w-[15px] items-center rounded-full bg-[#EBEBEB] px-1">
             {selectedNames.length}
@@ -232,7 +199,7 @@ const ClientsNameFilter = () => {
                     ref={searchRef}
                     // value={searchText}
 
-                    placeholder="Search for clients"
+                    placeholder="Search for Agents"
                     className="block w-full rounded-full border-gray-300 bg-[#F8F9FA] pl-10  focus-visible:outline-none  focus-visible:ring-1 focus-visible:ring-green-500 focus-visible:ring-offset-1 sm:text-sm "
                   />
                   <button
@@ -245,7 +212,7 @@ const ClientsNameFilter = () => {
                 </div>
                 <button
                   type="button"
-                  onClick={() => addClientNames(selectedNames)}
+                  onClick={() => addAgentsNames(selectedNames)}
                   className=" relative inset-y-0 right-0 -ml-px flex items-center space-x-2 rounded-full  border bg-[#69C920] px-4   py-2 pl-3 text-sm font-medium  text-white  focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500"
                 >
                   Apply Filter
@@ -274,7 +241,7 @@ const ClientsNameFilter = () => {
               ) : (
                 <div className=" flex items-center py-4 text-sm text-[#163143]">
                   <ul className="flex flex-wrap gap-x-5 gap-y-2 pl-2">
-                    <p>Selected Clients:</p>
+                    <p>Selected Agents:</p>
                     {selectedNames.map((name, index) => (
                       <li
                         className=" flex items-center gap-[10px] rounded-full bg-[#69C920] py-1 pl-2 pr-2 text-white "
@@ -303,4 +270,4 @@ const ClientsNameFilter = () => {
   );
 };
 
-export default ClientsNameFilter;
+export default AgentsNameFilter;

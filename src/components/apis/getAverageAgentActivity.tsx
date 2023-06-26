@@ -5,7 +5,13 @@ import { StatsNegativeIcon, StatsPositiveIcon } from "../Icons/icons";
 import { CookieValueTypes, getCookie, hasCookie } from "cookies-next";
 import { useFiltersStore } from "@/store/useFiltersStore";
 
-export const getAverageAgentActivity = async (filterClientName: string[]) => {
+export const getAverageAgentActivity = async (
+  filterClientName: string[],
+  filterAgentsName: string[],
+  filterTeamLeadsName: string[],
+  filterOMsName: string[],
+  filterCSMsName: string[]
+) => {
   let accessToken: CookieValueTypes = "";
   if (hasCookie("talentPOP_token")) {
     accessToken = getCookie("talentPOP_token");
@@ -14,6 +20,10 @@ export const getAverageAgentActivity = async (filterClientName: string[]) => {
     const res = await fetch(
       `http://18.237.25.116:8000/average-agent-activity?client=${
         filterClientName[0] || ""
+      }&agentname=${filterAgentsName[0] || ""}&teamlead=${
+        filterTeamLeadsName[0] || ""
+      }&operationmanager=${filterOMsName[0] || ""}&customersuccessmanager=${
+        filterCSMsName[0] || ""
       }`,
       {
         headers: {
@@ -33,11 +43,32 @@ export const getAverageAgentActivity = async (filterClientName: string[]) => {
   }
 };
 const AverageAgentActivity = () => {
-  const { filterClientName } = useFiltersStore();
+  const {
+    filterClientName,
+    filterAgentsName,
+    filterCSMsName,
+    filterOMsName,
+    filterTeamLeadsName,
+  } = useFiltersStore();
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["average-agent-activity", filterClientName],
-    queryFn: () => getAverageAgentActivity(filterClientName),
+    queryKey: [
+      "average-agent-activity",
+      filterClientName,
+      filterAgentsName,
+      filterTeamLeadsName,
+      filterOMsName,
+
+      filterCSMsName,
+    ],
+    queryFn: () =>
+      getAverageAgentActivity(
+        filterClientName,
+        filterAgentsName,
+        filterTeamLeadsName,
+        filterOMsName,
+        filterCSMsName
+      ),
   });
   if (isLoading) return <p className=" text-base text-[#69C920]">Loading...</p>;
   if (error) return <p className=" text-base text-[#69C920]">Error</p>;

@@ -4,7 +4,20 @@ import { useQuery } from "@tanstack/react-query";
 import { CookieValueTypes, getCookie, hasCookie } from "cookies-next";
 import { useFiltersStore } from "@/store/useFiltersStore";
 
-export const getClienWithAgentsCount = async (filterClientName: string[]) => {
+export const getClienWithAgentsCount = async (
+  filterClientName: string[],
+  filterAgentsName: string[],
+  filterTeamLeadsName: string[],
+  filterOMsName: string[],
+  filterCSMsName: string[]
+) => {
+  console.log(
+    filterClientName,
+    filterAgentsName,
+    filterCSMsName,
+    filterOMsName,
+    filterTeamLeadsName
+  );
   let accessToken: CookieValueTypes = "";
   if (hasCookie("talentPOP_token")) {
     accessToken = getCookie("talentPOP_token");
@@ -13,6 +26,10 @@ export const getClienWithAgentsCount = async (filterClientName: string[]) => {
     const res = await fetch(
       `http://18.237.25.116:8000/active-agents-by-client?client=${
         filterClientName[0] || ""
+      }&agentname=${filterAgentsName[0] || ""}&teamlead=${
+        filterTeamLeadsName[0] || ""
+      }&operationmanager=${filterOMsName[0] || ""}&customersuccessmanager=${
+        filterCSMsName[0] || ""
       }`,
       {
         headers: {
@@ -22,6 +39,7 @@ export const getClienWithAgentsCount = async (filterClientName: string[]) => {
       }
     );
     const data = await res.json();
+    console.log("Clients With Gents", data);
     if (res.status === 401) {
       return { message: "Not authenticated" };
     }
@@ -33,10 +51,33 @@ export const getClienWithAgentsCount = async (filterClientName: string[]) => {
 };
 
 const ClientsWithAgents = () => {
-  const { filterClientName } = useFiltersStore();
+  const {
+    filterClientName,
+    filterAgentsName,
+    filterTeamLeadsName,
+    filterOMsName,
+
+    filterCSMsName,
+  } = useFiltersStore();
   const { data, isLoading, error } = useQuery({
-    queryKey: ["clients-with-agents", filterClientName],
-    queryFn: () => getClienWithAgentsCount(filterClientName),
+    queryKey: [
+      "clients-with-agents",
+      filterClientName,
+      filterAgentsName,
+      filterTeamLeadsName,
+      filterOMsName,
+
+      filterCSMsName,
+    ],
+    queryFn: () =>
+      getClienWithAgentsCount(
+        filterClientName,
+        filterAgentsName,
+        filterTeamLeadsName,
+        filterOMsName,
+
+        filterCSMsName
+      ),
   });
   if (isLoading)
     return <p className=" text-base font-bold text-[#69C920]">Loading...</p>;

@@ -5,7 +5,13 @@ import { LowActivityChart } from "../HarizontalBarChart2";
 import { CookieValueTypes, getCookie, hasCookie } from "cookies-next";
 import { useFiltersStore } from "@/store/useFiltersStore";
 
-const getAgentLowActivityReport = async (filterClientName: string[]) => {
+const getAgentLowActivityReport = async (
+  filterClientName: string[],
+  filterAgentsName: string[],
+  filterTeamLeadsName: string[],
+  filterOMsName: string[],
+  filterCSMsName: string[]
+) => {
   let accessToken: CookieValueTypes = "";
   if (hasCookie("talentPOP_token")) {
     accessToken = getCookie("talentPOP_token");
@@ -14,6 +20,10 @@ const getAgentLowActivityReport = async (filterClientName: string[]) => {
     const res = await fetch(
       `http://18.237.25.116:8000/low-activity-rate-report-agents?client=${
         filterClientName[0] || ""
+      }&agentname=${filterAgentsName[0] || ""}&teamlead=${
+        filterTeamLeadsName[0] || ""
+      }&operationmanager=${filterOMsName[0] || ""}&customersuccessmanager=${
+        filterCSMsName[0] || ""
       }`,
       {
         headers: {
@@ -33,11 +43,33 @@ const getAgentLowActivityReport = async (filterClientName: string[]) => {
   }
 };
 const AgentsLowActivityReport = () => {
-  const { filterClientName } = useFiltersStore();
+  const {
+    filterClientName,
+    filterAgentsName,
+    filterCSMsName,
+    filterOMsName,
+    filterTeamLeadsName,
+  } = useFiltersStore();
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["agents-low-activity-report", filterClientName],
-    queryFn: () => getAgentLowActivityReport(filterClientName),
+    queryKey: [
+      "agents-low-activity-report",
+      filterClientName,
+      filterAgentsName,
+      filterTeamLeadsName,
+      filterOMsName,
+
+      filterCSMsName,
+    ],
+    queryFn: () =>
+      getAgentLowActivityReport(
+        filterClientName,
+        filterAgentsName,
+        filterTeamLeadsName,
+        filterOMsName,
+
+        filterCSMsName
+      ),
   });
   if (isLoading)
     return (

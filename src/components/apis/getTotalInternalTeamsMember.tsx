@@ -7,7 +7,11 @@ import { CookieValueTypes, getCookie, hasCookie } from "cookies-next";
 import { useFiltersStore } from "@/store/useFiltersStore";
 
 export const getTotalInternalTeamMembers = async (
-  filterClientName: string[]
+  filterClientName: string[],
+  filterAgentsName: string[],
+  filterTeamLeadsName: string[],
+  filterOMsName: string[],
+  filterCSMsName: string[]
 ) => {
   let accessToken: CookieValueTypes = "";
   if (hasCookie("talentPOP_token")) {
@@ -17,6 +21,10 @@ export const getTotalInternalTeamMembers = async (
     const res = await fetch(
       `http://18.237.25.116:8000/total-internal-members?client=${
         filterClientName[0] || ""
+      }&agentname=${filterAgentsName[0] || ""}&teamlead=${
+        filterTeamLeadsName[0] || ""
+      }&operationmanager=${filterOMsName[0] || ""}&customersuccessmanager=${
+        filterCSMsName[0] || ""
       }`,
       {
         headers: {
@@ -36,11 +44,32 @@ export const getTotalInternalTeamMembers = async (
   }
 };
 const TotalInternalTeamMembers = () => {
-  const { filterClientName } = useFiltersStore();
+  const {
+    filterClientName,
+    filterAgentsName,
+    filterCSMsName,
+    filterOMsName,
+    filterTeamLeadsName,
+  } = useFiltersStore();
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["total-internal-team-members", filterClientName],
-    queryFn: () => getTotalInternalTeamMembers(filterClientName),
+    queryKey: [
+      "total-internal-team-members",
+      filterClientName,
+      filterAgentsName,
+      filterTeamLeadsName,
+      filterOMsName,
+
+      filterCSMsName,
+    ],
+    queryFn: () =>
+      getTotalInternalTeamMembers(
+        filterClientName,
+        filterAgentsName,
+        filterTeamLeadsName,
+        filterOMsName,
+        filterCSMsName
+      ),
   });
   if (isLoading) return <p className=" text-base text-[#69C920]">Loading...</p>;
   if (error) return <p className=" text-base text-[#69C920]">Error</p>;

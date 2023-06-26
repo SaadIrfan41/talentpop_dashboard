@@ -6,7 +6,13 @@ import { InternalTeamActivityChart } from "../InternalTeamActivityChart";
 import { CookieValueTypes, getCookie, hasCookie } from "cookies-next";
 import { useFiltersStore } from "@/store/useFiltersStore";
 
-const getInterTeamReportAVG = async (filterClientName: string[]) => {
+const getInterTeamReportAVG = async (
+  filterClientName: string[],
+  filterAgentsName: string[],
+  filterTeamLeadsName: string[],
+  filterOMsName: string[],
+  filterCSMsName: string[]
+) => {
   let accessToken: CookieValueTypes = "";
   if (hasCookie("talentPOP_token")) {
     accessToken = getCookie("talentPOP_token");
@@ -15,6 +21,10 @@ const getInterTeamReportAVG = async (filterClientName: string[]) => {
     const res = await fetch(
       `http://18.237.25.116:8000/rolling-average-internal-team-activity-report?client=${
         filterClientName[0] || ""
+      }&agentname=${filterAgentsName[0] || ""}&teamlead=${
+        filterTeamLeadsName[0] || ""
+      }&operationmanager=${filterOMsName[0] || ""}&customersuccessmanager=${
+        filterCSMsName[0] || ""
       }`,
       {
         headers: {
@@ -34,11 +44,33 @@ const getInterTeamReportAVG = async (filterClientName: string[]) => {
   }
 };
 const InternalTeamReportAVG = () => {
-  const { filterClientName } = useFiltersStore();
+  const {
+    filterClientName,
+    filterAgentsName,
+    filterCSMsName,
+    filterOMsName,
+    filterTeamLeadsName,
+  } = useFiltersStore();
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["internal-team-report-avg", filterClientName],
-    queryFn: () => getInterTeamReportAVG(filterClientName),
+    queryKey: [
+      "internal-team-report-avg",
+      filterClientName,
+      filterAgentsName,
+      filterTeamLeadsName,
+      filterOMsName,
+
+      filterCSMsName,
+    ],
+    queryFn: () =>
+      getInterTeamReportAVG(
+        filterClientName,
+        filterAgentsName,
+        filterTeamLeadsName,
+        filterOMsName,
+
+        filterCSMsName
+      ),
   });
 
   if (isLoading)

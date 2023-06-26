@@ -5,9 +5,7 @@ import { ExpandIcon, SettingIcon } from "./Icons/icons";
 import getQueryClient from "@/utils/getQueryClient";
 import { dehydrate } from "@tanstack/query-core";
 import { useQuery } from "@tanstack/react-query";
-import TotalActiveAgents, {
-  getTotalActiveAgents,
-} from "./apis/getTotalActiveAgents";
+import TotalActiveAgents from "./apis/getTotalActiveAgents";
 import Hydrate from "@/utils/hydrate.client";
 import TotalInternalTeamMembers from "./apis/getTotalInternalTeamsMember";
 import ClientsWithAgents from "./apis/getClientsWithAgents";
@@ -183,7 +181,7 @@ const AgentsWorkforceReport = () => {
           {/* AGENTS ACTIVITY REPORT */}
           <div className="grid  grid-cols-2 gap-10 px-7 pt-11">
             {/* Agents High Activity Report */}
-            <div className=" mt-10  max-h-[500px] overflow-y-auto rounded-2xl  border text-[#163143] ">
+            <div className=" mt-10  min-h-[500px] overflow-y-auto rounded-2xl  border text-[#163143] ">
               <div className="flex items-center px-4 py-4 ">
                 <h3 className=" text-base font-extrabold">
                   High Activity Rate Report (Agents)

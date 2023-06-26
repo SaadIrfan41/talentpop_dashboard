@@ -7,7 +7,6 @@ import GlobalPerformance from "./GlobalPerformance";
 import { useMenuStore } from "@/store/useMenuStore";
 
 const ReportingMenu = () => {
-  // const [menu, setmenu] = useState(1);
   const { changeReportingMenu, reportingMenu } = useMenuStore();
   console.log(reportingMenu);
 

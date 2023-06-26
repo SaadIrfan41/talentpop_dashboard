@@ -6,7 +6,13 @@ import { CookieValueTypes, getCookie, hasCookie } from "cookies-next";
 import { InternalTeamActivityRateChart } from "../InternalTeamActivityRateChart";
 import { useFiltersStore } from "@/store/useFiltersStore";
 
-const getInternalTeamActivityRate = async (filterClientName: string[]) => {
+const getInternalTeamActivityRate = async (
+  filterClientName: string[],
+  filterAgentsName: string[],
+  filterTeamLeadsName: string[],
+  filterOMsName: string[],
+  filterCSMsName: string[]
+) => {
   let accessToken: CookieValueTypes = "";
   if (hasCookie("talentPOP_token")) {
     accessToken = getCookie("talentPOP_token");
@@ -17,7 +23,13 @@ const getInternalTeamActivityRate = async (filterClientName: string[]) => {
       // `http://18.237.25.116:8000/internal-team-activity-rate?client=${
       //   filterClientName[0] || ""
       // }`,
-      `http://18.237.25.116:8000/internal-team-activity-rate?client=Abstract Ocean`,
+      `http://18.237.25.116:8000/internal-team-activity-rate?client=${
+        filterClientName[0] || ""
+      }&agentname=${filterAgentsName[0] || ""}&teamlead=${
+        filterTeamLeadsName[0] || ""
+      }&operationmanager=${filterOMsName[0] || ""}&customersuccessmanager=${
+        filterCSMsName[0] || ""
+      }`,
       {
         headers: {
           accept: "application/json",
@@ -41,7 +53,13 @@ const getInternalTeamActivityRate = async (filterClientName: string[]) => {
   }
 };
 const InternalTeamActivityRate = () => {
-  const { filterClientName } = useFiltersStore();
+  const {
+    filterClientName,
+    filterAgentsName,
+    filterCSMsName,
+    filterOMsName,
+    filterTeamLeadsName,
+  } = useFiltersStore();
 
   let pageParams: any = 1;
   const {
@@ -52,8 +70,24 @@ const InternalTeamActivityRate = () => {
     isLoading,
     error,
   } = useInfiniteQuery({
-    queryKey: ["internal-team-activity-rate", filterClientName],
-    queryFn: () => getInternalTeamActivityRate(filterClientName),
+    queryKey: [
+      "internal-team-activity-rate",
+      filterClientName,
+      filterAgentsName,
+      filterTeamLeadsName,
+      filterOMsName,
+
+      filterCSMsName,
+    ],
+    queryFn: () =>
+      getInternalTeamActivityRate(
+        filterClientName,
+        filterAgentsName,
+        filterTeamLeadsName,
+        filterOMsName,
+
+        filterCSMsName
+      ),
     getNextPageParam: (_, pages) => pages.length + 1,
   });
 

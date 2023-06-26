@@ -5,6 +5,10 @@ import { ChevronDown, Filter, RefreshCw } from "lucide-react";
 import ReportingMenu from "@/components/ReportingMenu";
 import LogoutButton from "@/components/LogoutButton";
 import ClientsNameFilter from "@/components/Filters/ClientsNameFilter";
+import AgentsNameFilter from "@/components/Filters/AgentsNameFilter";
+import TeamLeadsNameFilter from "@/components/Filters/TeamLeadFilter";
+import OperationManagerFilter from "@/components/Filters/OperationManagerFilter";
+import CSMNameFilter from "@/components/Filters/CSMFilter";
 
 const HomePage = () => {
   return (
@@ -36,46 +40,10 @@ const HomePage = () => {
         </div>
         <ClientsNameFilter />
 
-        <button
-          // onClick={() => setshowModal(!showModal)}
-          className=" relative flex items-center rounded-full border py-1 pl-3 text-sm font-bold text-[#163143]"
-        >
-          Agents{" "}
-          <span className="flex h-[15px] w-[15px] items-center rounded-full bg-[#EBEBEB] px-1">
-            0
-          </span>
-          <ChevronDown />
-        </button>
-        <button
-          // onClick={() => setshowModal(!showModal)}
-          className=" relative flex items-center rounded-full border py-1 pl-3 text-sm font-bold text-[#163143]"
-        >
-          Team Lead{" "}
-          <span className="flex h-[15px] w-[15px] items-center rounded-full bg-[#EBEBEB] px-1">
-            0
-          </span>
-          <ChevronDown />
-        </button>
-        <button
-          // onClick={() => setshowModal(!showModal)}
-          className=" relative flex items-center rounded-full border py-1 pl-3 text-sm font-bold text-[#163143]"
-        >
-          OM{" "}
-          <span className="flex h-[15px] w-[15px] items-center rounded-full bg-[#EBEBEB] px-1">
-            0
-          </span>
-          <ChevronDown />
-        </button>
-        <button
-          // onClick={() => setshowModal(!showModal)}
-          className=" relative flex items-center rounded-full border py-1 pl-3 text-sm font-bold text-[#163143]"
-        >
-          CSM{" "}
-          <span className="flex h-[15px] w-[15px] items-center rounded-full bg-[#EBEBEB] px-1">
-            0
-          </span>
-          <ChevronDown />
-        </button>
+        <AgentsNameFilter />
+        <TeamLeadsNameFilter />
+        <OperationManagerFilter />
+        <CSMNameFilter />
       </div>
       <section className="ml-10 mr-16 bg-white pt-6">
         <ReportingMenu />

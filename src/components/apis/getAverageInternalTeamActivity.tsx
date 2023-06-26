@@ -6,7 +6,11 @@ import { CookieValueTypes, getCookie, hasCookie } from "cookies-next";
 import { useFiltersStore } from "@/store/useFiltersStore";
 
 export const getAverageInternalTeamActivity = async (
-  filterClientName: string[]
+  filterClientName: string[],
+  filterAgentsName: string[],
+  filterTeamLeadsName: string[],
+  filterOMsName: string[],
+  filterCSMsName: string[]
 ) => {
   let accessToken: CookieValueTypes = "";
   if (hasCookie("talentPOP_token")) {
@@ -16,6 +20,10 @@ export const getAverageInternalTeamActivity = async (
     const res = await fetch(
       `http://18.237.25.116:8000/average-internal-team-activity?client=${
         filterClientName[0] || ""
+      }&agentname=${filterAgentsName[0] || ""}&teamlead=${
+        filterTeamLeadsName[0] || ""
+      }&operationmanager=${filterOMsName[0] || ""}&customersuccessmanager=${
+        filterCSMsName[0] || ""
       }`,
       {
         headers: {
@@ -35,11 +43,33 @@ export const getAverageInternalTeamActivity = async (
   }
 };
 const AverageInternalTeamActivity = () => {
-  const { filterClientName } = useFiltersStore();
+  const {
+    filterClientName,
+    filterAgentsName,
+    filterCSMsName,
+    filterOMsName,
+    filterTeamLeadsName,
+  } = useFiltersStore();
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["average-internal-team-activity", filterClientName],
-    queryFn: () => getAverageInternalTeamActivity(filterClientName),
+    queryKey: [
+      "average-internal-team-activity",
+      filterClientName,
+      filterAgentsName,
+      filterTeamLeadsName,
+      filterOMsName,
+
+      filterCSMsName,
+    ],
+    queryFn: () =>
+      getAverageInternalTeamActivity(
+        filterClientName,
+        filterAgentsName,
+        filterTeamLeadsName,
+        filterOMsName,
+
+        filterCSMsName
+      ),
   });
   if (isLoading) return <p className=" text-base text-[#69C920]">Loading...</p>;
   if (error) return <p className=" text-base text-[#69C920]">Error</p>;
