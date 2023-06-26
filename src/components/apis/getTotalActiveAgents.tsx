@@ -4,7 +4,8 @@ import React from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { StatsPositiveIcon } from "../Icons/icons";
 import { CookieValueTypes, getCookie, hasCookie } from "cookies-next";
-export const getTotalActiveAgents = async () => {
+import { useFiltersStore } from "@/store/useFiltersStore";
+export const getTotalActiveAgents = async (filterClientName: string[]) => {
   try {
     let accessToken: CookieValueTypes = "";
     if (hasCookie("talentPOP_token")) {
@@ -12,7 +13,9 @@ export const getTotalActiveAgents = async () => {
     }
     // const accessToken = getCookie("talentPOP_token");
     const res = await fetch(
-      "https://reporting.hotel3lue3ijq.us-east-1.cs.amazonlightsail.com/active-agents",
+      `http://18.237.25.116:8000/active-agents?client=${
+        filterClientName[0] || ""
+      }`,
       {
         headers: {
           accept: "application/json",
@@ -27,28 +30,34 @@ export const getTotalActiveAgents = async () => {
     }
     return agents_count;
   } catch (error: any) {
-    return error.message;
+    console.log(error.message);
+    return { message: "Internal Server Error" };
   }
 };
 const TotalActiveAgents = () => {
+  const { filterClientName } = useFiltersStore();
+
   const { data, isLoading, error } = useQuery({
-    queryKey: ["total-active-agents"],
-    queryFn: () => getTotalActiveAgents(),
+    queryKey: ["total-active-agents", filterClientName],
+    queryFn: () => getTotalActiveAgents(filterClientName),
   });
 
   if (isLoading) return <p className=" text-base text-[#69C920]">Loading...</p>;
 
   if (error) return <p className=" text-base text-[#69C920]">Error</p>;
-  if (data.message === "Not authenticated")
-    return (
-      <p className=" text-base text-[#69C920]">Login Credentials Invalid</p>
-    );
+  if (data.message) {
+    if (data.message === "Not authenticated")
+      return (
+        <p className=" text-base text-[#69C920]">Login Credentials Invalid</p>
+      );
+    return <p className=" text-base text-[#69C920]">{data.message}</p>;
+  }
 
   // console.log(data);
   // console.log(data.data[0]?.count_user_id);
   return (
     <>
-      {data.data[0]?.count_user_id}
+      {data?.data[0]?.count_user_id || 0}
       <StatsPositiveIcon />
     </>
   );

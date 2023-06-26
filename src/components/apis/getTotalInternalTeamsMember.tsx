@@ -4,41 +4,53 @@ import React from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { StatsNegativeIcon, StatsPositiveIcon } from "../Icons/icons";
 import { CookieValueTypes, getCookie, hasCookie } from "cookies-next";
+import { useFiltersStore } from "@/store/useFiltersStore";
 
-export const getTotalInternalTeamMembers = async () => {
+export const getTotalInternalTeamMembers = async (
+  filterClientName: string[]
+) => {
   let accessToken: CookieValueTypes = "";
   if (hasCookie("talentPOP_token")) {
     accessToken = getCookie("talentPOP_token");
   }
-  const res = await fetch(
-    "https://reporting.hotel3lue3ijq.us-east-1.cs.amazonlightsail.com/total-internal-members",
-    {
-      headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
+  try {
+    const res = await fetch(
+      `http://18.237.25.116:8000/total-internal-members?client=${
+        filterClientName[0] || ""
+      }`,
+      {
+        headers: {
+          accept: "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    const team_member__count = await res.json();
+    if (res.status === 401) {
+      return { message: "Not authenticated" };
     }
-  );
-  const team_member__count = await res.json();
-  if (res.status === 401) {
-    return { message: "Not authenticated" };
+    return team_member__count;
+  } catch (error: any) {
+    console.log(error.message);
+    return { message: "Internal Server Error" };
   }
-  return team_member__count;
 };
 const TotalInternalTeamMembers = () => {
-  //   const data = await getTotalInternalTeamMembers()
-  //   console.log(data)
+  const { filterClientName } = useFiltersStore();
+
   const { data, isLoading, error } = useQuery({
-    queryKey: ["total-internal-team-members"],
-    queryFn: () => getTotalInternalTeamMembers(),
+    queryKey: ["total-internal-team-members", filterClientName],
+    queryFn: () => getTotalInternalTeamMembers(filterClientName),
   });
   if (isLoading) return <p className=" text-base text-[#69C920]">Loading...</p>;
   if (error) return <p className=" text-base text-[#69C920]">Error</p>;
-  if (data.message === "Not authenticated")
-    return (
-      <p className=" text-base text-[#69C920]">Login Credentials Invalid</p>
-    );
-  // console.log(data.data[0]?.sum_count_hubstaff_all_users)
+  if (data.message) {
+    if (data.message === "Not authenticated")
+      return (
+        <p className=" text-base text-[#69C920]">Login Credentials Invalid</p>
+      );
+    return <p className=" text-base text-[#69C920]">{data.message}</p>;
+  }
   return (
     <>
       {data.data[0]?.sum_count_hubstaff_all_users}

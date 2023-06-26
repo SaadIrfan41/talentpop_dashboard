@@ -1,7 +1,11 @@
-import React from 'react'
+"use client";
+import { useMenuStore } from "@/store/useMenuStore";
+import React from "react";
 
 const GlobalPerformance = () => {
-  return <div>GlobalPerformance</div>
-}
+  const { reportingMenu } = useMenuStore();
 
-export default GlobalPerformance
+  return <div>{reportingMenu === 2 && <div>GlobalPerformance</div>}</div>;
+};
+
+export default GlobalPerformance;

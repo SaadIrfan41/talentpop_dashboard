@@ -8,13 +8,10 @@ export async function POST(request: NextRequest) {
   formData.append("username", username);
   formData.append("password", password);
   try {
-    const res = await fetch(
-      "https://reporting.hotel3lue3ijq.us-east-1.cs.amazonlightsail.com/login",
-      {
-        method: "POST",
-        body: formData,
-      }
-    );
+    const res = await fetch("http://18.237.25.116:8000/login", {
+      method: "POST",
+      body: formData,
+    });
     const data = await res.json();
     if (data.access_token) {
       cookies().set("talentPOP_token", data.access_token);

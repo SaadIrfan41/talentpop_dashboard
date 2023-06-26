@@ -1,7 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
+ /* .divider {
+   margin-top: 10px;
+   padding-top: 5px;
+   border-top: 1px solid #ccc;
+   font-weight: bold;
+ } */
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -80,15 +86,15 @@
   }
 }
 
-.tab {
+/* .tab {
   
-  /* border-radius: 15px 15px 0px 0px;
+  border-radius: 15px 15px 0px 0px;
   background-color: #FFF;
   position: relative;
   border:1px solid;
   display: inline-block;
-  z-index: 2; */
-}
+  z-index: 2;
+} */
 
 /* .tab:before {
   height: 100%;
@@ -106,7 +112,7 @@
   transform: skewX(-20deg);
   z-index: -1;
 } */
-.tab:after {
+/* .tab:after {
   height: 100%;
   width: 100%;
   
@@ -115,10 +121,34 @@
   border-color: red;
   content: "";
   position: absolute;
-  /* left: 104px; */
+  left: 104px;
   top: 0px;
   right: 0;
   -webkit-transform: skewX(40deg);
   transform: skewX(20deg);
   z-index: 20;
-}
+} */
+
+ ::-webkit-scrollbar {
+   width: 8px !important;
+  overflow: hidden;
+
+ }
+
+ body {
+   scrollbar-color: #DADADA #e4e4e4 !important;
+ }
+
+ ::-webkit-scrollbar-track {
+   background-color: #a10d0d !important;
+   border-radius: 500px !important;
+   display: none !important;
+   overflow: hidden;
+
+ }
+
+ ::-webkit-scrollbar-thumb {
+   background-color: #DADADA !important;
+   border-radius: 500px !important;
+  overflow: hidden;
+ }

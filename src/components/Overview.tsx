@@ -1,7 +1,11 @@
-import React from 'react'
+"use client";
+import { useMenuStore } from "@/store/useMenuStore";
+import React from "react";
 
 const Overview = () => {
-  return <div>Overview</div>
-}
+  const { reportingMenu } = useMenuStore();
 
-export default Overview
+  return <div>{reportingMenu === 0 && <div>OverView</div>}</div>;
+};
+
+export default Overview;

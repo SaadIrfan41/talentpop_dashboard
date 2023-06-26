@@ -4,34 +4,45 @@ import React, { Fragment } from "react";
 import { CookieValueTypes, getCookie, hasCookie } from "cookies-next";
 
 import { InternalTeamActivityRateChart } from "../InternalTeamActivityRateChart";
+import { useFiltersStore } from "@/store/useFiltersStore";
 
-const getInternalTeamActivityRate = async ({ pageParams }: any) => {
+const getInternalTeamActivityRate = async (filterClientName: string[]) => {
   let accessToken: CookieValueTypes = "";
   if (hasCookie("talentPOP_token")) {
     accessToken = getCookie("talentPOP_token");
   }
-  const res = await fetch(
-    // 'https://reporting.hotel3lue3ijq.us-east-1.cs.amazonlightsail.com/internal-team-activity-rate'
-    "https://reporting.hotel3lue3ijq.us-east-1.cs.amazonlightsail.com/internal-team-activity-rate?client=talentpop",
-    {
-      headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
+  try {
+    const res = await fetch(
+      // 'http://18.237.25.116:8000/internal-team-activity-rate'
+      // `http://18.237.25.116:8000/internal-team-activity-rate?client=${
+      //   filterClientName[0] || ""
+      // }`,
+      `http://18.237.25.116:8000/internal-team-activity-rate?client=Abstract Ocean`,
+      {
+        headers: {
+          accept: "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+      // {
+      //   params: { _page: pageParams },
+      // }
+    );
+
+    const data = await res.json();
+
+    if (res.status === 401) {
+      return { message: "Not authenticated" };
     }
-    // {
-    //   params: { _page: pageParams },
-    // }
-  );
-
-  const data = await res.json();
-
-  if (res.status === 401) {
-    return { message: "Not authenticated" };
+    return data;
+  } catch (error: any) {
+    console.log(error.message);
+    return { message: "Internal Server Error" };
   }
-  return data;
 };
 const InternalTeamActivityRate = () => {
+  const { filterClientName } = useFiltersStore();
+
   let pageParams: any = 1;
   const {
     data,
@@ -41,8 +52,8 @@ const InternalTeamActivityRate = () => {
     isLoading,
     error,
   } = useInfiniteQuery({
-    queryKey: ["internal-team-activity-rate"],
-    queryFn: () => getInternalTeamActivityRate((pageParams = { pageParams })),
+    queryKey: ["internal-team-activity-rate", filterClientName],
+    queryFn: () => getInternalTeamActivityRate(filterClientName),
     getNextPageParam: (_, pages) => pages.length + 1,
   });
 
@@ -58,6 +69,15 @@ const InternalTeamActivityRate = () => {
     return (
       <p className=" text-base text-[#69C920]">Login Credentials Invalid</p>
     );
+  if (data?.pages[0].message) {
+    if (data?.pages[0].message === "Not authenticated")
+      return (
+        <p className=" text-base text-[#69C920]">Login Credentials Invalid</p>
+      );
+    return (
+      <p className=" text-base text-[#69C920]">{data?.pages[0].message}</p>
+    );
+  }
 
   return (
     <div className=" mx-auto flex flex-wrap gap-10 pl-8 pt-8">

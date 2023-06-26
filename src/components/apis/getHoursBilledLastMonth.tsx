@@ -4,31 +4,41 @@ import React from "react";
 import { CookieValueTypes, getCookie, hasCookie } from "cookies-next";
 
 import { MonthlyBilledClientsChart } from "../MonthlyBilledClientsChart";
+import { useFiltersStore } from "@/store/useFiltersStore";
 
-export const getHoursBilledLastMonth = async () => {
+export const getHoursBilledLastMonth = async (filterClientName: string[]) => {
   let accessToken: CookieValueTypes = "";
   if (hasCookie("talentPOP_token")) {
     accessToken = getCookie("talentPOP_token");
   }
-  const res = await fetch(
-    "https://reporting.hotel3lue3ijq.us-east-1.cs.amazonlightsail.com/hour-billed-per-client-last-month",
-    {
-      headers: {
-        accept: "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
+  try {
+    const res = await fetch(
+      `http://18.237.25.116:8000/hour-billed-per-client-last-month?client=${
+        filterClientName[0] || ""
+      }`,
+      {
+        headers: {
+          accept: "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    const data = await res.json();
+    if (res.status === 401) {
+      return { message: "Not authenticated" };
     }
-  );
-  const data = await res.json();
-  if (res.status === 401) {
-    return { message: "Not authenticated" };
+    return data;
+  } catch (error: any) {
+    console.log(error.message);
+    return { message: "Internal Server Error" };
   }
-  return data;
 };
 const HoursBilledLastMonth = () => {
+  const { filterClientName } = useFiltersStore();
+
   const { data, isLoading, error } = useQuery({
-    queryKey: ["hours-billed-last-month"],
-    queryFn: () => getHoursBilledLastMonth(),
+    queryKey: ["hours-billed-last-month", filterClientName],
+    queryFn: () => getHoursBilledLastMonth(filterClientName),
   });
 
   if (isLoading)
@@ -38,10 +48,13 @@ const HoursBilledLastMonth = () => {
       </p>
     );
   if (error) return <p className=" text-base text-[#69C920]">Error</p>;
-  if (data.message === "Not authenticated")
-    return (
-      <p className=" text-base text-[#69C920]">Login Credentials Invalid</p>
-    );
+  if (data.message) {
+    if (data.message === "Not authenticated")
+      return (
+        <p className=" text-base text-[#69C920]">Login Credentials Invalid</p>
+      );
+    return <p className=" text-base text-[#69C920]">{data.message}</p>;
+  }
 
   const clientName: string[] = data.data.map((obj: any) => obj["hop.name"]);
   const billableHrs: string[] = data.data.map((obj: any) =>

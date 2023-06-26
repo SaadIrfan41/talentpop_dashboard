@@ -1,9 +1,10 @@
 import React from "react";
 import Logo from "../../public/logo.png";
 import Image from "next/image";
-import { ChevronDown, RefreshCw } from "lucide-react";
+import { ChevronDown, Filter, RefreshCw } from "lucide-react";
 import ReportingMenu from "@/components/ReportingMenu";
 import LogoutButton from "@/components/LogoutButton";
+import ClientsNameFilter from "@/components/Filters/ClientsNameFilter";
 
 const HomePage = () => {
   return (
@@ -28,6 +29,54 @@ const HomePage = () => {
           </button>
         </div>
       </section>
+      <div className="mt-6 flex items-center gap-5  px-16">
+        <div className="flex">
+          <Filter />
+          <span className=" font-bold">Filters</span>
+        </div>
+        <ClientsNameFilter />
+
+        <button
+          // onClick={() => setshowModal(!showModal)}
+          className=" relative flex items-center rounded-full border py-1 pl-3 text-sm font-bold text-[#163143]"
+        >
+          Agents{" "}
+          <span className="flex h-[15px] w-[15px] items-center rounded-full bg-[#EBEBEB] px-1">
+            0
+          </span>
+          <ChevronDown />
+        </button>
+        <button
+          // onClick={() => setshowModal(!showModal)}
+          className=" relative flex items-center rounded-full border py-1 pl-3 text-sm font-bold text-[#163143]"
+        >
+          Team Lead{" "}
+          <span className="flex h-[15px] w-[15px] items-center rounded-full bg-[#EBEBEB] px-1">
+            0
+          </span>
+          <ChevronDown />
+        </button>
+        <button
+          // onClick={() => setshowModal(!showModal)}
+          className=" relative flex items-center rounded-full border py-1 pl-3 text-sm font-bold text-[#163143]"
+        >
+          OM{" "}
+          <span className="flex h-[15px] w-[15px] items-center rounded-full bg-[#EBEBEB] px-1">
+            0
+          </span>
+          <ChevronDown />
+        </button>
+        <button
+          // onClick={() => setshowModal(!showModal)}
+          className=" relative flex items-center rounded-full border py-1 pl-3 text-sm font-bold text-[#163143]"
+        >
+          CSM{" "}
+          <span className="flex h-[15px] w-[15px] items-center rounded-full bg-[#EBEBEB] px-1">
+            0
+          </span>
+          <ChevronDown />
+        </button>
+      </div>
       <section className="ml-10 mr-16 bg-white pt-6">
         <ReportingMenu />
       </section>
